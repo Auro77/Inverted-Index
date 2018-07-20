@@ -45,7 +45,7 @@ public class WordCount{
 			HashMap<String, Integer>  hm = new HashMap<String, Integer>();
 			String result="";
         
-			for(Text a : values){
+			for(Text text : values){
 				String entry = a.toString();
             
 				if(hm.containsKey(entry)){ 
@@ -57,7 +57,7 @@ public class WordCount{
 				}
 			}
 			
-			for( String k : hm.keySet() ){
+			for(String s : hm.keySet()){
 				result = result + k + ":" + hm.get(k).toString() + " ";
 			}
 			
@@ -66,19 +66,21 @@ public class WordCount{
 	}
 	
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        if (args.length != 2){
+        
+		if (args.length != 2){
             System.err.println("Usage: Word Count <input path> <output path>");
             System.exit(-1);
         }
         
 		Configuration conf = new Configuration();
-        Job job = Job.getInstance(conf,"word count");
+        Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
         job.setMapperClass(WordCountMapper.class);
         job.setReducerClass(WordCountReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
-        FileInputFormat.addInputPath(job, new Path(args[0]));
+        
+		FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
